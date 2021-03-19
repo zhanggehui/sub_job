@@ -9,9 +9,6 @@ subdir='/home/liufeng_pkuhpc/lustre2/zgh/sub_job'
 # 提交任务前预处理
 if [ ${code} == 'gmx' ]; then
     echo "A gromacs job!"
-    NodeNum=1             # 由于后面有文件修改，故节点数只能用1
-    export Usempirun=1    # mdrun_mpi or mdrun
-    export orientation=y
     export scriptsdir
 elif [ ${code} == 'lmp' ]; then
     echo "A lammps job!"

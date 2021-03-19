@@ -1,7 +1,7 @@
 # environment variable:
+# rundir ; runscript ; scriptsdir
 
-# orientation; rundir; runscript; scriptsdir
-
+Usempirun=1   # mdrun_mpi or mdrun
 # export I_MPI_DEBUG=20
 if [ $SLURM_JOB_PARTITION == 'cn_nl' ]; then
     echo 'Choose gromacs2019.2_intelmkl2019u4 ( for cn_nl ) !' 
