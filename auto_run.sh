@@ -3,7 +3,6 @@ NodeNum=$3
 scriptsdir=$4
 export runscript=$5
 export rundir=$6
-
 subdir='/home/liufeng_pkuhpc/lustre2/zgh/sub_job'
 
 # 提交任务前预处理

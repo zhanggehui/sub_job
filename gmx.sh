@@ -24,4 +24,5 @@ else
     #gmxrun="$mpistring mdrun_mpi2"
 fi
 
-source ./$rundir/$runscript
+cd ./$rundir
+source ./$runscript
