@@ -22,6 +22,7 @@ else
 fi
 
 # 选择使用的节点，指定或者自动选择
+echo "Choosing node!"
 if [ $2 == 'auto' ]; then
     ncnnl=`sinfo | grep 'idle' | grep 'cn_nl' | awk '{print $4}'`
     ncns=`sinfo | grep 'idle' | grep 'cn-short' | awk '{print $4}'`
@@ -50,6 +51,7 @@ else
     NodeType=Unknown
     echo "Unknown NodeType!"
 fi
+echo "Choose ${NodeType} to run this job!"
 
 #rm -rf $rundir
 if [ ! -d $rundir ]; then
@@ -101,6 +103,7 @@ if [ ! -d $rundir ]; then
 
         # 针对选择不同code的后处理
         if [ ${code} == 'gmx' ]; then
+            echo "gromacs post process!"
             if [ $runscript == 'nvt-cycle.sh' ]; then
                 cp $scriptsdir/nvt-cycle.mdp ./$rundir
             fi
