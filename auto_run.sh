@@ -12,17 +12,18 @@ if [ ${code} == 'gmx' ]; then
 elif [ ${code} == 'lmp' ]; then
     echo "A lammps job!"
 elif [ ${code} == 'g4' ]; then
+    echo "A Geant4 job!"
     macfile='run.mac'
     initfile='init.mac'
 elif [ ${code} == 'test' ];then
     echo "A simple test!"
 else
     code=Unknown
-    echo "Unknown code!"
+    echo "Unknown code! Maybe be some misspelling!"
 fi
 
 # 选择使用的节点，指定或者自动选择
-echo "Choosing node!"
+echo "---------------- Choosing node! ----------------"
 if [ $2 == 'auto' ]; then
     ncnnl=`sinfo | grep 'idle' | grep 'cn_nl' | awk '{print $4}'`
     ncns=`sinfo | grep 'idle' | grep 'cn-short' | awk '{print $4}'`
@@ -49,18 +50,17 @@ elif [ $2 == 'debug' ]; then
     NodeType=debug
 else
     NodeType=Unknown
-    echo "Unknown NodeType!"
+    echo "Unknown NodeType! Maybe be some misspelling!"
 fi
-echo "Choose ${NodeType} to run this job!"
+echo "--------- Choose ${NodeType} to run this job! ---------"
 
-#rm -rf $rundir
 if [ ! -d $rundir ]; then
     if [ $NodeType == 'Unknown' ] || [ ${code} == 'Unknown' ]; then
         echo "Do nothing!"
     else
         mkdir $rundir
         if [ $NodeType == 'debug' ]; then
-            NtasksPerNode=24 # 虽然不用于修改提交脚本，但是G4运行时需要更改线程数
+            NtasksPerNode=24 #虽然不用于修改提交脚本，但是G4运行时需要更改线程数
             cat $subdir/debug.sh $subdir/${code}.sh > $subdir/debug_${code}.sh
             submissionscript="$subdir/debug_${code}.sh" 
         else
@@ -98,8 +98,8 @@ if [ ! -d $rundir ]; then
         ename="./$rundir/2.err" ; keyword="#SBATCH -e" ; newline="#SBATCH -e $ename"
         sed -i "/$keyword/c$newline" $submissionscript
 
-        cp $submissionscript ./$rundir # 为了进行事后检查提交脚本
-        cp $scriptsdir/$runscript ./$rundir # 为了事后检查运行脚本，以及隔离不同情形的模拟运行文件(单独修改)
+        cp $submissionscript ./$rundir #为了进行事后检查提交脚本
+        cp $scriptsdir/$runscript ./$rundir #为了事后检查运行脚本，或者隔离不同情形的模拟运行文件(单独修改)
 
         # 针对选择不同code的后处理
         if [ ${code} == 'gmx' ]; then
@@ -110,6 +110,7 @@ if [ ! -d $rundir ]; then
         elif [ ${code} == 'lmp' ]; then
             echo "lammps post process!"
         elif [ ${code} == 'g4' ]; then
+            echo "Geant4 post process!"
             cp $scriptsdir/$macfile ./$rundir
             cp ../$initfile ./$rundir
             str1="numberOfThreads"
