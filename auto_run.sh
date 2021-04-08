@@ -25,8 +25,8 @@ fi
 # 选择使用的节点，指定或者自动选择
 echo "---------------- Choosing node! ----------------"
 if [ $2 == 'auto' ]; then
-    ncnnl=`sinfo | grep -w 'idle' | grep 'cn_nl' | awk '{print $4}'`
-    ncns=`sinfo | grep -w 'idle' | grep 'cn-short' | awk '{print $4}'`
+    ncnnl=`sinfo | grep 'idle[^\*]' | grep 'cn_nl' | awk '{print $4}'`
+    ncns=`sinfo | grep 'idle[^\*]' | grep 'cn-short' | awk '{print $4}'`
     if [ -z "$ncnnl" ] && [ -z "$ncns" ]; then # -n是否为非空串,-z是否为空串,判断必须加引号
         NodeType=cn_nl
     elif [ -z "$ncnnl" ] && [ -n "$ncns" ]; then
