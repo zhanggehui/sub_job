@@ -36,6 +36,8 @@ if [ $2 == 'auto' ]; then
     else
         if [ $ncnnl -ge 10 ]; then
             NodeType=cn_nl
+        elif [ $NodeNum -le $ncnnl ]; then
+            NodeType=cn_nl
         elif [ $ncns -gt $ncnnl ]; then
             NodeType=cn-short
         else
