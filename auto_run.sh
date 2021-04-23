@@ -5,7 +5,7 @@ export runscript=$5
 export rundir=$6
 subdir='/home/liufeng_pkuhpc/lustre2/zgh/sub_job'
 
-# 提交任务前预处理
+#提交任务前预处理
 if [ ${code} == 'gmx' ]; then
     echo "A gromacs job!"
     export scriptsdir
@@ -22,12 +22,12 @@ else
     echo "Unknown code! Maybe be some misspelling!"
 fi
 
-# 选择使用的节点，指定或者自动选择
+#选择使用的节点，指定或者自动选择
 echo "---------------- Choosing node! ----------------"
 if [ $2 == 'auto' ]; then
     ncnnl=`sinfo | grep 'idle[^\*]' | grep 'cn_nl' | awk '{print $4}'`
     ncns=`sinfo | grep 'idle[^\*]' | grep 'cn-short' | awk '{print $4}'`
-    if [ -z "$ncnnl" ] && [ -z "$ncns" ]; then # -n是否为非空串,-z是否为空串,判断必须加引号
+    if [ -z "$ncnnl" ] && [ -z "$ncns" ]; then #-n是否为非空串，-z是否为空串，判断必须加引号
         NodeType=cn_nl
     elif [ -z "$ncnnl" ] && [ -n "$ncns" ]; then
         NodeType=cn-short
@@ -74,7 +74,7 @@ if [ ! -d $rundir ]; then
             fi
             submissionscript="$subdir/cn_${code}.sh"
 
-            # 修改提交脚本细节
+            #修改提交脚本细节
             keyword="#SBATCH -p"; newline="#SBATCH -p $NodeType"
             sed -i "/$keyword/c$newline" $submissionscript
             keyword="#SBATCH -N"; newline="#SBATCH -N $NodeNum"
@@ -103,7 +103,7 @@ if [ ! -d $rundir ]; then
         cp $submissionscript ./$rundir #为了进行事后检查提交脚本
         cp $scriptsdir/$runscript ./$rundir #为了事后检查运行脚本，或者隔离不同情形的模拟运行文件(单独修改)
 
-        # 针对选择不同code的后处理
+        #针对选择不同code的后处理
         if [ ${code} == 'gmx' ]; then
             echo "gromacs post process!"
             if [ $runscript == 'nvt-cycle.sh' ]; then

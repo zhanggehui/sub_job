@@ -1,5 +1,5 @@
-# environment variable:
-# rundir ; runscript
+#environment variable:
+#rundir; runscript
 
 export OMP_NUM_THREADS=1
 source /home/liufeng_pkuhpc/lustre2/zgh/lmp/lmp_use/lammps_29Oct2020.sh auto
