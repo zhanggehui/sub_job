@@ -27,21 +27,26 @@ echo "---------------- Choosing node! ----------------"
 if [ $2 == 'auto' ]; then
     ncnnl=`sinfo | grep 'idle[^\*]' | grep 'cn_nl' | awk '{print $4}'`
     ncns=`sinfo | grep 'idle[^\*]' | grep 'cn-short' | awk '{print $4}'`
-    if [ -z "$ncnnl" ] && [ -z "$ncns" ]; then #-n是否为非空串，-z是否为空串，判断必须加引号
-        NodeType=cn_nl
-    elif [ -z "$ncnnl" ] && [ -n "$ncns" ]; then
+    ncnnl_sub=`sq | grep 'cn_nl' | wc -l`
+    if [ $ncnnl_sub -ge 20 ]; then
         NodeType=cn-short
-    elif [ -n "$ncnnl" ] && [ -z "$ncns" ]; then
-        NodeType=cn_nl
     else
-        if [ $ncnnl -ge 10 ]; then
+        if [ -z "$ncnnl" ] && [ -z "$ncns" ]; then #-n是否为非空串，-z是否为空串，判断必须加引号
             NodeType=cn_nl
-        elif [ $NodeNum -le $ncnnl ]; then
-            NodeType=cn_nl
-        elif [ $ncns -gt $ncnnl ]; then
+        elif [ -z "$ncnnl" ] && [ -n "$ncns" ]; then
             NodeType=cn-short
-        else
+        elif [ -n "$ncnnl" ] && [ -z "$ncns" ]; then
             NodeType=cn_nl
+        else
+            if [ $ncnnl -ge 10 ]; then
+                NodeType=cn_nl
+            elif [ $NodeNum -le $ncnnl ]; then
+                NodeType=cn_nl
+            elif [ $ncns -gt $ncnnl ]; then
+                NodeType=cn-short
+            else
+                NodeType=cn_nl
+            fi
         fi
     fi
 elif [ $2 == 'cn-short' ]; then
@@ -126,7 +131,8 @@ if [ ! -d $rundir ]; then
         rm -rf $submissionscript
 
         echo "Submiting a job to ${NodeType}, Please wait 2s!"
-        sleep 2s
+        echo ''
+        sleep 3s
     fi
 else
     echo 'Rundir already exists! Please make sure!'
